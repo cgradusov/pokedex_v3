@@ -25,7 +25,7 @@ const Description = styled.p`
   display: block;
   font-size: 12px;
   line-height: 18px;
-  
+  text-align: center;
 `;
 
 const Img = styled.img`
@@ -41,6 +41,7 @@ const ContactsHeader = styled.h4`
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
+  text-align: center;
 `;
 
 const ContactsButtons = styled.div`
