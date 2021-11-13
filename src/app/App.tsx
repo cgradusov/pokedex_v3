@@ -1,12 +1,12 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import { Switch, Route } from 'react-router-dom';
+import { HashRouter, Switch, Route } from 'react-router-dom';
 
 import BottomNav from 'features/BottomNav/BottomNav';
 import About from 'pages/about/About';
 import logo from './logo.svg';
 
-const Container = styled.div`
+const Container = styled(HashRouter)`
   text-align: center;
 `;
 

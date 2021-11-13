@@ -1,7 +1,6 @@
 import App from 'app/App';
 import React from 'react';
 import ReactDom from 'react-dom';
-import { HashRouter } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
 const GlobasStyle = createGlobalStyle`
@@ -18,9 +17,7 @@ margin: 0;
 ReactDom.render(
   <React.StrictMode>
     <GlobasStyle />
-    <HashRouter>
-      <App />
-    </HashRouter>
+    <App />
   </React.StrictMode>,
   document.getElementById('root'),
 );
