@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-type PokeType = 'bug' | 'dark' | 'dragon' | 'electric' | 'fairy' | 'fighting' | 'fire' | 'flying' | 'ghost' | 'grass' | 'ground' | 'ice' | 'normal' | 'psychic' | 'poison' | 'rock' | 'steel' | 'water';
+export type PokeType = 'bug' | 'dark' | 'dragon' | 'electric' | 'fairy' | 'fighting' | 'fire' | 'flying' | 'ghost' | 'grass' | 'ground' | 'ice' | 'normal' | 'psychic' | 'poison' | 'rock' | 'steel' | 'water';
 
 type PokeBadgeProps = {
   type: PokeType;
@@ -14,7 +14,7 @@ const Badge = styled.div<BadgeProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4px 12px;
+  padding: 3px 8px;
   box-sizing: border-box;
   background: ${(props) => props.gradient};
   border: ${(props) => (props.isSelected ? '2px solid #000000;' : 'none')};
