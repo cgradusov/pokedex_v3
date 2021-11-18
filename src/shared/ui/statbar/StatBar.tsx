@@ -7,7 +7,6 @@ const Container = styled.div`
   height: 14px;
   width: 100%;
   box-sizing: border-box;
-  margin: 0 18px;
 `;
 
 const Name = styled.div`
@@ -23,7 +22,7 @@ const Name = styled.div`
 
 const Bar = styled.div`
   height: 14px;
-  width: 100%;
+  width: 70%;
   border-radius: 8px;
   background-color: #c4c4c4;
 `;
