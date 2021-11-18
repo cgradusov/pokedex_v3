@@ -19,7 +19,10 @@ const SearchInput = styled.input`
   width: 250px;
 `;
 
-const FiltersButton = styled(FiltersIcon)`
+const FiltersButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 40px;
 `;
 
@@ -32,7 +35,9 @@ type SearchProps = {
 const Search: React.FC<SearchProps> = ({ onChange, onFiltersClick }) => (
   <Container>
     <SearchInput type="text" onChange={onChange} placeholder="Type Name or Code" />
-    <FiltersButton onClick={onFiltersClick} />
+    <FiltersButton onClick={onFiltersClick}>
+      <FiltersIcon />
+    </FiltersButton>
   </Container>
 );
 
