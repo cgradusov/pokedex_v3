@@ -1,8 +1,9 @@
+import React, { useState } from 'react';
 import Search from 'features/Search/Search';
-import React from 'react';
 import styled, { AnyStyledComponent } from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Card from 'features/Card/Card';
+import PokePage from 'features/PokePage/PokePage';
 
 const Container = styled.div`
   display: flex;
@@ -36,36 +37,49 @@ const fetchData = () => console.log('Fetching More Data...');
 const hasMore = true;
 // ** MOCKS **
 
-const Main = () => (
-  <Container>
-    <Search
-      onChange={(e) => {
-        const target = e.target as HTMLInputElement;
-        console.log(target.value);
-      }}
-      onFiltersClick={() => console.log('Filters Click')}
-    />
-    <ScrollableContainer id="feed">
-      <StyledInfiniteScroll
-        dataLength={items.length}
-        next={fetchData}
-        hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-        scrollableTarget="feed"
-      >
-        {items.map((el) => (
-          <Card
-            key={el}
-            imageSrc="/assets/venusaur.png"
-            imageAlt="venusaur"
-            name="Venusaur #003"
-            onClick={() => console.log('Click')}
-            types={['grass', 'poison']}
-          />
-        ))}
-      </StyledInfiniteScroll>
-    </ScrollableContainer>
-  </Container>
-);
+const Main = () => {
+  const [isPageOpen, setPageOpen] = useState(false);
+  const [currentPokemonId, setCurrentPokemonId] = useState(3);
+
+  return (
+    <Container>
+      <Search
+        onChange={(e) => {
+          const target = e.target as HTMLInputElement;
+          console.log(target.value);
+        }}
+        onFiltersClick={() => console.log('Filters Click')}
+      />
+      <ScrollableContainer id="feed">
+        <StyledInfiniteScroll
+          dataLength={items.length}
+          next={fetchData}
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+          scrollableTarget="feed"
+        >
+          {items.map((el) => (
+            <Card
+              key={el}
+              imageSrc="/assets/venusaur.png"
+              imageAlt="venusaur"
+              name="Venusaur #003"
+              onClick={() => {
+                setCurrentPokemonId(3);
+                setPageOpen(true);
+              }}
+              types={['grass', 'poison']}
+            />
+          ))}
+        </StyledInfiniteScroll>
+      </ScrollableContainer>
+      <PokePage
+        isOpen={isPageOpen}
+        pokemonId={currentPokemonId}
+        onClose={() => { setPageOpen(false); }}
+      />
+    </Container>
+  );
+};
 
 export default Main;
