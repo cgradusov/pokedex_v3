@@ -20,7 +20,7 @@ const Badge = styled.div<BadgeProps>`
   border: ${(props) => (props.isSelected ? '2px solid #000000;' : 'none')};
   border-radius: 15px;
   width: fit-content;
-  font-size: 15px;
+  font-size: 10px;
   font-weight: 500;
   color: #000000;
 `;
