@@ -1,27 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Search from 'features/Search/Search';
-import styled, { AnyStyledComponent } from 'styled-components';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import Card from 'features/Card/Card';
+import styled from 'styled-components';
+
 import PokePage from 'features/PokePage/PokePage';
-import pl from 'prefetched/pokemonsList';
-import { capitalizeString, formatNumber } from 'utils/stringUtils';
-import { PokeType } from 'shared/ui/badge/PokeBadge';
-import { Stat } from 'utils/pokeStatsFormater';
-
-export type Pokemon = {
-  id: number, name: string, height: number, weight: number,
-  stats: Stat[],
-  types: PokeType[],
-  gender: number,
-  desc: string
-}
-
-type PokemonList = {
-  [key: string]: Pokemon
-}
-
-const pokemonsList = pl as PokemonList;
+import { Pokemon } from 'app/App';
+import Feed from 'features/Feed/Feed';
+import useLocalStorage from 'hooks/useLocalStorage';
 
 const Container = styled.div`
   display: flex;
@@ -32,39 +16,17 @@ const Container = styled.div`
   min-height: calc(100vh - 64px);
 `;
 
-const ScrollableContainer = styled.div`
-  overflow-y: scroll;
-  max-height: calc(100vh - 64px - 120px);
-  width: 100%;
+type MainProps = {
+  values: Pokemon[],
+  isFavouritesPage: boolean;
+}
 
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  &::-webkit-scrollbar {
-    display: none;
-  }
+const Main: React.FC<MainProps> = ({ values, isFavouritesPage }) => {
+  const [pokeballList, setPokeballList] = useLocalStorage<number[]>('pokeball', []);
 
-  /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-`;
-
-const StyledInfiniteScroll = styled(InfiniteScroll as unknown as AnyStyledComponent)`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-
-  & > * {
-    margin-bottom: 10px;
-    margin-right: 2px;
-  }
-`;
-
-// TODO: Move pokemon values loading to App component?
-const values = Object.values(pokemonsList);
-
-const Main = () => {
   const [hasMore, setHasMore] = useState(true);
   const [nextPage, setNextPage] = useState(2);
-  const [items, setItems] = useState(values.slice(0, 27));
+  const [items, setItems] = useState<Pokemon[]>([]);
   const [isPageOpen, setPageOpen] = useState(false);
   const [currentPokemon, setCurrentPokemon] = useState(items[0]);
   const fetchData = () => {
@@ -73,10 +35,30 @@ const Main = () => {
   };
 
   useEffect(() => {
+    if (items.length === 0) {
+      setHasMore(false);
+    }
+
     if (items.length === values.length) {
       setHasMore(false);
     }
   }, [items]);
+
+  useEffect(() => {
+    if (!isFavouritesPage) {
+      setItems(values.slice(0, 27));
+    } else {
+      setItems(values.filter((p: Pokemon) => pokeballList.includes(p?.id)).slice(0, 27));
+    }
+  }, [values, isFavouritesPage, pokeballList]);
+
+  const onPokeballClick = (pokemonId: number) => {
+    if (pokeballList.includes(pokemonId)) {
+      setPokeballList(pokeballList.filter((id: number) => id !== pokemonId));
+    } else {
+      setPokeballList([...pokeballList, pokemonId]);
+    }
+  };
 
   return (
     <Container>
@@ -91,35 +73,20 @@ const Main = () => {
         }}
         onFiltersClick={() => setPageOpen(false)}
       />
-      <ScrollableContainer id="feed">
-        <StyledInfiniteScroll
-          dataLength={items.length}
-          next={fetchData}
-          hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
-          scrollableTarget="feed"
-        >
-          {items.map((el) => (
-            <Card
-              key={el?.id}
-              imageSrc={`/assets/${formatNumber(el?.id.toString())}.png`}
-              imageAlt={el.name}
-              name={`${capitalizeString(el.name)} #${formatNumber(el?.id.toString())}`}
-              onClick={() => {
-                if (!isPageOpen) {
-                  setCurrentPokemon(el);
-                  setPageOpen(true);
-                }
-              }}
-              types={el.types as PokeType[]}
-            />
-          ))}
-        </StyledInfiniteScroll>
-      </ScrollableContainer>
+      <Feed
+        items={items}
+        hasMore={hasMore}
+        isPageOpen={isPageOpen}
+        fetchData={fetchData}
+        setCurrentPokemon={setCurrentPokemon}
+        setPageOpen={setPageOpen}
+      />
       <PokePage
         isOpen={isPageOpen}
         pokemon={currentPokemon}
         onClose={() => { setPageOpen(false); }}
+        onPokeballClick={onPokeballClick}
+        pokemonInPokeball={pokeballList.includes(currentPokemon?.id)}
       />
     </Container>
   );
