@@ -16,7 +16,7 @@ const SearchInput = styled.input`
   border-radius: 40px;
   padding: 0 20px;
   height: 40px;
-  width: 250px;
+  width: 80%;
 `;
 
 const FiltersButton = styled.div`
