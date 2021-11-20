@@ -1,7 +1,6 @@
 type PokeStat = 'hp' | 'attack' | 'defense' | 'special-attack' | 'special-defense' | 'speed';
 
 type StatNameMap = {
-  // eslint-disable-next-line no-unused-vars
   [key in PokeStat]: string;
 };
 

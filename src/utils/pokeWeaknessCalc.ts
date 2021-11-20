@@ -13,7 +13,6 @@ type PokeTypeModifiers = {
 }
 
 type PokeTypeData = {
-  // eslint-disable-next-line no-unused-vars
   [key in PokeType]: PokeTypeModifiers
 }
 

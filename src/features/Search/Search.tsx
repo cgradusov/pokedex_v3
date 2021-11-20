@@ -27,7 +27,6 @@ const FiltersButton = styled.div`
 `;
 
 type SearchProps = {
-  // eslint-disable-next-line no-unused-vars
   onChange: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   onFiltersClick: () => void;
   onClick: () => void;

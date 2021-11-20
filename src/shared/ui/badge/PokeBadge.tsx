@@ -26,7 +26,6 @@ const Badge = styled.div<BadgeProps>`
 `;
 
 type PokeTypesMap = {
-  // eslint-disable-next-line no-unused-vars
   [K in PokeType]: string
 }
 
