@@ -1,8 +1,13 @@
 import Stats from 'features/Stats/Stats';
+import { Pokemon } from 'pages/main/Main';
 import React from 'react';
 import Sheet from 'react-modal-sheet';
 import PokeBadge from 'shared/ui/badge/PokeBadge';
 import styled from 'styled-components';
+import genderCalculator from 'utils/pokeGenderCalc';
+import statsFormater from 'utils/pokeStatsFormater';
+import calculateWeaknesses from 'utils/pokeWeaknessCalc';
+import { capitalizeString, formatNumber } from 'utils/stringUtils';
 
 const Container = styled.div`
   display: flex;
@@ -18,7 +23,11 @@ const Name = styled.h2`
   font-size: 18px;
   line-height: 21px;
 `;
-const Image = styled.img``;
+
+const Image = styled.img`
+  width: 148px;
+`;
+
 const Description = styled.div`
   width: 80%;
   text-align: center;
@@ -26,7 +35,7 @@ const Description = styled.div`
   font-weight: 400;
   font-size: 10px;
   line-height: 12px;
-  margin-bottom: 20px;
+  margin: 20px;
 `;
 
 const StatsCotainer = styled.div`
@@ -83,38 +92,20 @@ const Footer = styled.div`
 
 type PokePageProps = {
   isOpen: boolean;
-  pokemonId: number;
+  pokemon: Pokemon;
   onClose: () => void;
 };
 
 // TODO: Remove @ts-ignore
-const PokePage: React.FC<PokePageProps> = ({ isOpen, pokemonId, onClose }) => {
-  // * MOCK *
-  const pokemonDataMock = {
-    3: {
-      name: 'Venusaur #003',
-      description: 'After a rainy day, the flower on its back smells stronger. The scent attracts other Pokémon.',
-      image: 'venusaur',
-      types: ['grass', 'poison'],
-      weaknesses: ['fire', 'flying', 'ice', 'psychic'],
-      height: '2m',
-      weight: '100kg',
-      gender: ['m', 'f'],
-      stats: {
-        hp: 50,
-        attack: 50,
-        defence: 50,
-        specialAttack: 50,
-        specialDefence: 50,
-        speed: 50,
-      },
-    },
-  };
+const PokePage: React.FC<PokePageProps> = ({ isOpen, pokemon, onClose }) => {
+  if (!pokemon) return <div />;
 
   const {
-    name, image, description, height, weight, gender, types, weaknesses, stats,
-    // @ts-ignore
-  } = pokemonDataMock[pokemonId];
+    name, id, desc, height, weight, gender, types, stats,
+  } = pokemon;
+
+  // TODO: add useCallback?
+  const calculatedWeakness = calculateWeaknesses(types);
 
   return (
     <Sheet isOpen={isOpen} onClose={onClose} snapPoints={[650]}>
@@ -126,33 +117,41 @@ const PokePage: React.FC<PokePageProps> = ({ isOpen, pokemonId, onClose }) => {
         <Sheet.Content>
           <Container>
             <Name>
-              {name}
+              {`${capitalizeString(name)} #${formatNumber(id.toString())}`}
             </Name>
-            <Image src={`/assets/${image}.png`} alt={image} />
+            <Image src={`/assets/${formatNumber(id.toString())}.png`} alt={name} />
             <Description>
-              {description}
+              {desc}
             </Description>
             <StatsParamsContainer>
               <StatsCotainer>
                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Stats {...stats} />
+                <Stats {...statsFormater(stats)} />
               </StatsCotainer>
               <ParamsContainer>
                 <p>
                   Height:
                   {' '}
-                  <b>{height}</b>
+                  <b>
+                    {height / 10}
+                    {' '}
+                    m
+                  </b>
                 </p>
                 <p>
                   Weight:
                   {' '}
-                  <b>{weight}</b>
+                  <b>
+                    {weight / 10}
+                    {' '}
+                    kg
+                  </b>
                 </p>
                 <p>
                   Gender:
                   {' '}
                   <b>
-                    {gender.join('/')}
+                    {genderCalculator(gender)}
                   </b>
                 </p>
               </ParamsContainer>
@@ -161,15 +160,13 @@ const PokePage: React.FC<PokePageProps> = ({ isOpen, pokemonId, onClose }) => {
               <TypesWeakness>
                 <h3>Types:</h3>
                 <TypesWeaknessContainer>
-                  {/* @ts-ignore */}
-                  {types.map((t: string) => <PokeBadge key={t} type={t} />)}
+                  {types.map((t) => <PokeBadge key={t} type={t} />)}
                 </TypesWeaknessContainer>
               </TypesWeakness>
               <TypesWeakness>
                 <h3>Weaknesses:</h3>
                 <TypesWeaknessContainer>
-                  {/* @ts-ignore */}
-                  {weaknesses.map((t: string) => <PokeBadge key={t} type={t} />)}
+                  {calculatedWeakness.map((t) => <PokeBadge key={t} type={t} />)}
                 </TypesWeaknessContainer>
               </TypesWeakness>
             </Footer>
