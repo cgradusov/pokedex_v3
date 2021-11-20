@@ -30,11 +30,12 @@ type SearchProps = {
   // eslint-disable-next-line no-unused-vars
   onChange: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   onFiltersClick: () => void;
+  onClick: () => void;
 }
 
-const Search: React.FC<SearchProps> = ({ onChange, onFiltersClick }) => (
+const Search: React.FC<SearchProps> = ({ onClick, onChange, onFiltersClick }) => (
   <Container>
-    <SearchInput type="text" onChange={onChange} placeholder="Type Name or Code" />
+    <SearchInput type="text" onClick={onClick} onChange={onChange} placeholder="Type Name or Code" />
     <FiltersButton onClick={onFiltersClick}>
       <FiltersIcon />
     </FiltersButton>
