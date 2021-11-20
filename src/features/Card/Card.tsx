@@ -17,11 +17,18 @@ const Container = styled.div`
   border: 2px solid #EFEFEF;
   box-sizing: border-box;
   border-radius: 10px;
+
+  @media screen and (max-width: 370px) {
+    width: 120px;
+  }
+
+  @media screen and (max-width: 310px) {
+    width: 100px;
+  }
 `;
 
 const Image = styled.img`
-  width: 140px;
-  height: 140px;
+  width: 90%;
 `;
 
 const Name = styled.h2`
