@@ -1,5 +1,5 @@
 import Stats from 'features/Stats/Stats';
-import { Pokemon } from 'pages/main/Main';
+import { Pokemon } from 'app/App';
 import React from 'react';
 import Sheet from 'react-modal-sheet';
 import PokeBadge from 'shared/ui/badge/PokeBadge';
@@ -8,6 +8,7 @@ import genderCalculator from 'utils/pokeGenderCalc';
 import statsFormater from 'utils/pokeStatsFormater';
 import calculateWeaknesses from 'utils/pokeWeaknessCalc';
 import { capitalizeString, formatNumber } from 'utils/stringUtils';
+import { PokeballFilledIcon } from 'shared/ui/icons/PokeballFilled';
 
 const Container = styled.div`
   display: flex;
@@ -90,14 +91,31 @@ const Footer = styled.div`
   width: 100%;
 `;
 
+type PokeBallProps = {
+  isSelected?: boolean;
+}
+
+const PokeBall = styled.div<PokeBallProps>`
+  position: absolute;
+  top: 0;
+  right: 30px;
+  z-index: 1;
+
+  color: ${(props) => (props.isSelected ? 'red' : 'white')};
+`;
+
 type PokePageProps = {
   isOpen: boolean;
   pokemon: Pokemon;
   onClose: () => void;
+  onPokeballClick: (pokemonId: number) => void;
+  pokemonInPokeball: boolean;
 };
 
 // TODO: Remove @ts-ignore
-const PokePage: React.FC<PokePageProps> = ({ isOpen, pokemon, onClose }) => {
+const PokePage: React.FC<PokePageProps> = ({
+  isOpen, pokemon, onClose, onPokeballClick, pokemonInPokeball,
+}) => {
   if (!pokemon) return <div />;
 
   const {
@@ -116,6 +134,12 @@ const PokePage: React.FC<PokePageProps> = ({ isOpen, pokemon, onClose }) => {
         {/* @ts-ignore */}
         <Sheet.Content>
           <Container>
+            <PokeBall
+              isSelected={pokemonInPokeball}
+              onClick={() => onPokeballClick(pokemon.id)}
+            >
+              <PokeballFilledIcon />
+            </PokeBall>
             <Name>
               {`${capitalizeString(name)} #${formatNumber(id.toString())}`}
             </Name>
