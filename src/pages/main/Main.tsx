@@ -6,6 +6,7 @@ import PokePage from 'features/PokePage/PokePage';
 import { Pokemon } from 'app/App';
 import Feed from 'features/Feed/Feed';
 import useLocalStorage from 'hooks/useLocalStorage';
+import { formatNumber } from 'utils/stringUtils';
 
 const Container = styled.div`
   display: flex;
@@ -23,6 +24,7 @@ type MainProps = {
 
 const Main: React.FC<MainProps> = ({ values, isFavouritesPage }) => {
   const [pokeballList, setPokeballList] = useLocalStorage<number[]>('pokeball', []);
+  const [searchValue, setSearchValue] = useState<string>('');
 
   const [hasMore, setHasMore] = useState(true);
   const [nextPage, setNextPage] = useState(2);
@@ -44,13 +46,23 @@ const Main: React.FC<MainProps> = ({ values, isFavouritesPage }) => {
     }
   }, [items]);
 
-  useEffect(() => {
-    if (!isFavouritesPage) {
-      setItems(values.slice(0, 27));
-    } else {
-      setItems(values.filter((p: Pokemon) => pokeballList.includes(p?.id)).slice(0, 27));
+  const pokeSearch = (search: string) => {
+    if (!Number.isNaN(search) && !Number.isNaN(parseFloat(search))) {
+      return (el: Pokemon) => formatNumber(el.id.toString()).includes(search);
     }
-  }, [values, isFavouritesPage, pokeballList]);
+
+    return (el: Pokemon) => el.name.includes(search);
+  };
+
+  useEffect(() => {
+    const searchedPokeList = searchValue !== '' ? values.filter(pokeSearch(searchValue)) : values;
+
+    if (!isFavouritesPage) {
+      setItems(searchedPokeList.slice(0, 27));
+    } else {
+      setItems(searchedPokeList.filter((p: Pokemon) => pokeballList.includes(p?.id)).slice(0, 27));
+    }
+  }, [values, isFavouritesPage, pokeballList, searchValue]);
 
   const onPokeballClick = (pokemonId: number) => {
     if (pokeballList.includes(pokemonId)) {
@@ -68,8 +80,7 @@ const Main: React.FC<MainProps> = ({ values, isFavouritesPage }) => {
         }}
         onChange={(e) => {
           const target = e.target as HTMLInputElement;
-          // eslint-disable-next-line no-console
-          console.log(target.value);
+          setSearchValue(target.value);
         }}
         onFiltersClick={() => setPageOpen(false)}
       />
