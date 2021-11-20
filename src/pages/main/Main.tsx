@@ -75,12 +75,12 @@ const Main: React.FC<MainProps> = ({ values, isFavouritesPage }) => {
   return (
     <Container>
       <Search
+        searchValue={searchValue}
         onClick={() => {
           setPageOpen(false);
         }}
-        onChange={(e) => {
-          const target = e.target as HTMLInputElement;
-          setSearchValue(target.value);
+        onChange={(sv: string) => {
+          setSearchValue(sv);
         }}
         onFiltersClick={() => setPageOpen(false)}
       />
