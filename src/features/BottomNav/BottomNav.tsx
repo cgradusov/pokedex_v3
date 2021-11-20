@@ -57,7 +57,7 @@ const BottomNav = () => (
     {/* @ts-ignore */}
     <Button to="/fav" activeStyle={activeButtonStyle}>
       <PokeballIcon />
-      Favorites
+      Favourites
     </Button>
 
     {/* @ts-ignore */}
