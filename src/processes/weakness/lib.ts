@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import pt from 'prefetched/pokeTypes';
-// TODO: export type to global types file?
-import { PokeType } from 'shared/ui/badge/PokeBadge';
+import { PokeType } from 'entities/types';
 
 type PokeTypeModifiers = {
   double_damage_from: PokeType[],
@@ -19,7 +18,8 @@ type PokeTypeData = {
 const pokeTypes = pt as PokeTypeData;
 type PPTM = Partial<PokeTypeModifiers>;
 
-const calculateWeaknesses = (types: PokeType[]) => {
+// eslint-disable-next-line import/prefer-default-export
+export const calculateWeaknesses = (types: PokeType[]) => {
   if (types.length === 0) {
     return [];
   }
@@ -48,5 +48,3 @@ const calculateWeaknesses = (types: PokeType[]) => {
 
   return [...new Set(weaknessesList)];
 };
-
-export default calculateWeaknesses;

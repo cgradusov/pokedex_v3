@@ -3,12 +3,14 @@ import Search from 'features/Search/Search';
 import styled from 'styled-components';
 
 import PokePage from 'features/PokePage/PokePage';
-import { Pokemon } from 'app/App';
 import Feed from 'features/Feed/Feed';
-import useLocalStorage from 'hooks/useLocalStorage';
-import { formatNumber } from 'utils/stringUtils';
-import { PokeType } from 'shared/ui/badge/PokeBadge';
-import Filters, { HeightWeight, SelectedHeightWeight } from 'features/Filters/Filters';
+import { Pokemon, PokeType } from 'entities/types';
+import Filters from 'features/Filters/Filters';
+import { HeightWeight } from 'processes/filter/types';
+import { applyFilters } from 'processes/filter';
+import { pokeSearch } from 'processes/search';
+import useToggleState from 'hooks/useToggleState';
+import useToggleLocalStorage from 'hooks/useToggleLocalStorage';
 
 const Container = styled.div`
   display: flex;
@@ -25,86 +27,52 @@ type MainProps = {
 }
 
 const Main: React.FC<MainProps> = ({ values, isFavouritesPage }) => {
-  const [selectedTypes, setSelectedTypes] = useState<PokeType[]>([]);
-  const [selectedHeights, setSelectedHeights] = useState<SelectedHeightWeight>([]);
-  const [selectedWeights, setSelectedWeights] = useState<SelectedHeightWeight>([]);
+  const [selectedTypes, setTypes] = useToggleState<PokeType>([]);
+  const [selectedHeights, setHeights] = useToggleState<HeightWeight>([]);
+  const [selectedWeights, setWeights] = useToggleState<HeightWeight>([]);
 
-  const setTypes = (t: PokeType) => {
-    if (selectedTypes.includes(t)) {
-      setSelectedTypes(selectedTypes.filter((el) => el !== t));
-    } else {
-      setSelectedTypes([...selectedTypes, t]);
-    }
-  };
+  const [pokeballList, togglePokeballList] = useToggleLocalStorage<number>('pokeball', []);
 
-  const setHeights = (h: HeightWeight) => {
-    if (selectedHeights.includes(h)) {
-      setSelectedHeights(selectedHeights.filter((el) => el !== h));
-    } else {
-      // setSelectedHeights([...selectedHeights, h]);
-      setSelectedHeights([h]);
-    }
-  };
-
-  const setWeights = (w: HeightWeight) => {
-    if (selectedWeights.includes(w)) {
-      setSelectedWeights(selectedWeights.filter((el) => el !== w));
-    } else {
-      // setSelectedWeights([...selectedWeights, w]);
-      setSelectedWeights([w]);
-    }
-  };
-
-  const [pokeballList, setPokeballList] = useLocalStorage<number[]>('pokeball', []);
   const [searchValue, setSearchValue] = useState<string>('');
-
   const [hasMore, setHasMore] = useState(true);
   const [nextPage, setNextPage] = useState(2);
   const [items, setItems] = useState<Pokemon[]>([]);
   const [isPageOpen, setPageOpen] = useState(false);
   const [isFiltersOpen, setFiltersOpen] = useState(false);
   const [currentPokemon, setCurrentPokemon] = useState(items[0]);
+
   const fetchData = () => {
+    const pokeballFiltered = isFavouritesPage
+      ? values.filter((p) => pokeballList.includes(p.id)) : values;
+
     setNextPage((prevState) => prevState + 1);
-    setItems(values.slice(0, 27 * nextPage));
+    setItems(pokeballFiltered.slice(0, 27 * nextPage));
   };
 
+  // set hasMore
   useEffect(() => {
-    if (items.length === 0) {
+    const pokeballFiltered = isFavouritesPage
+      ? values.filter((p) => pokeballList.includes(p.id)) : values;
+
+    if (items.length === pokeballFiltered.length) {
       setHasMore(false);
     }
-
-    if (items.length === values.length) {
-      setHasMore(false);
-    }
-  }, [items]);
-
-  const pokeSearch = (search: string) => {
-    if (!Number.isNaN(search) && !Number.isNaN(parseFloat(search))) {
-      return (el: Pokemon) => formatNumber(el.id.toString()).includes(search);
-    }
-
-    return (el: Pokemon) => el.name.includes(search);
-  };
-
-  // eslint-disable-next-line arrow-body-style
-  const applyFilters = (pokeValues: Pokemon[]) => {
-    // eslint-disable-next-line arrow-body-style
-    return pokeValues.filter((el: Pokemon) => {
-      return selectedTypes.every((t: PokeType) => el.types.includes(t))
-        && selectedHeights.every((h: HeightWeight) => el.height >= h[0] && el.height <= h[1])
-        && selectedWeights.every((w: HeightWeight) => el.weight >= w[0] && el.weight <= w[1]);
-    });
-  };
+  }, [items, values]);
 
   useEffect(() => {
-    const searchedPokeList = searchValue !== '' ? values.filter(pokeSearch(searchValue)) : values;
-    const filteredPokeList = searchValue !== '' ? applyFilters(searchedPokeList) : applyFilters(values);
+    const pokeballFiltered = values;
+    const searchedPokeList = searchValue !== '' ? pokeballFiltered.filter(pokeSearch(searchValue)) : pokeballFiltered;
+    const filteredPokeList = applyFilters(
+      searchedPokeList,
+      selectedTypes,
+      selectedHeights,
+      selectedWeights,
+    );
 
     if (!isFavouritesPage) {
       setItems(filteredPokeList.slice(0, 27));
     } else {
-      setItems(filteredPokeList.filter((p: Pokemon) => pokeballList.includes(p?.id)).slice(0, 27));
+      setItems(filteredPokeList.filter((p) => pokeballList.includes(p.id)).slice(0, 27));
     }
   }, [values,
     isFavouritesPage,
@@ -113,14 +81,6 @@ const Main: React.FC<MainProps> = ({ values, isFavouritesPage }) => {
     selectedTypes,
     selectedHeights,
     selectedWeights]);
-
-  const onPokeballClick = (pokemonId: number) => {
-    if (pokeballList.includes(pokemonId)) {
-      setPokeballList(pokeballList.filter((id: number) => id !== pokemonId));
-    } else {
-      setPokeballList([...pokeballList, pokemonId]);
-    }
-  };
 
   return (
     <Container>
@@ -154,7 +114,7 @@ const Main: React.FC<MainProps> = ({ values, isFavouritesPage }) => {
         isOpen={isPageOpen}
         pokemon={currentPokemon}
         onClose={() => { setPageOpen(false); }}
-        onPokeballClick={onPokeballClick}
+        onPokeballClick={togglePokeballList}
         pokemonInPokeball={pokeballList.includes(currentPokemon?.id)}
       />
       <Filters

@@ -1,6 +1,7 @@
 import React from 'react';
-import PokeBadge, { PokeType } from 'shared/ui/badge/PokeBadge';
 import styled from 'styled-components';
+import PokeBadge from 'shared/ui/badge/PokeBadge';
+import { PokeType } from 'entities/types';
 
 const Container = styled.div`
   display: flex;

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
-export type PokeType = 'bug' | 'dark' | 'dragon' | 'electric' | 'fairy' | 'fighting' | 'fire' | 'flying' | 'ghost' | 'grass' | 'ground' | 'ice' | 'normal' | 'psychic' | 'poison' | 'rock' | 'steel' | 'water';
+import { PokeType } from 'entities/types';
 
 type PokeBadgeProps = {
   type: PokeType;

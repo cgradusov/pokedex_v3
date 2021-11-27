@@ -1,4 +1,5 @@
-const genderCalculator = (gender: number) => {
+// eslint-disable-next-line import/prefer-default-export
+export const genderCalculator = (gender: number) => {
   switch (gender) {
     case -1:
       return '?';
@@ -8,5 +9,3 @@ const genderCalculator = (gender: number) => {
       return 'm/f';
   }
 };
-
-export default genderCalculator;

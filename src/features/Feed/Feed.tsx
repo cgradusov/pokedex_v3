@@ -3,9 +3,8 @@ import styled, { AnyStyledComponent } from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Card from 'features/Card/Card';
 
-import { capitalizeString, formatNumber } from 'utils/stringUtils';
-import { PokeType } from 'shared/ui/badge/PokeBadge';
-import { Pokemon } from 'app/App';
+import { capitalizeString, formatNumber } from 'utils/string';
+import { PokeType, Pokemon } from 'entities/types';
 
 const ScrollableContainer = styled.div`
   overflow-y: scroll;

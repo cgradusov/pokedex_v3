@@ -31,6 +31,8 @@
     "paths": {
       "app/*": ["./app/*"],
       "features/*": ["./features/*"],
+      "entities/*": ["./entities/*"],
+      "processes/*": ["./processes/*"],
       "pages/*": ["./pages/*"],
       "shared/*": ["./shared/*"],
       "prefetched/*": ["./prefetched/*"],

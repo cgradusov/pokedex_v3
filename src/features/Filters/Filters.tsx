@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import Sheet from 'react-modal-sheet';
-import PokeBadge, { PokeType } from 'shared/ui/badge/PokeBadge';
+import PokeBadge from 'shared/ui/badge/PokeBadge';
 import ParamButton from 'shared/ui/parambutton/ParamButton';
+import { PokeType } from 'entities/types';
+import { HeightWeight, SelectedHeightWeight } from 'processes/filter/types';
 
 const Container = styled.div`
   padding: 20px;
@@ -44,9 +46,6 @@ const HeightWeightContainer = styled.div`
 `;
 
 const types: PokeType[] = ['bug', 'dark', 'dragon', 'electric', 'fairy', 'fighting', 'fire', 'flying', 'ghost', 'grass', 'ground', 'ice', 'normal', 'psychic', 'poison', 'rock', 'steel', 'water'];
-
-export type HeightWeight = [number, number];
-export type SelectedHeightWeight = HeightWeight[]
 
 type FiltersProps = {
   isOpen: boolean;

@@ -1,14 +1,14 @@
-import Stats from 'features/Stats/Stats';
-import { Pokemon } from 'app/App';
 import React from 'react';
+import Stats from 'features/Stats/Stats';
 import Sheet from 'react-modal-sheet';
 import PokeBadge from 'shared/ui/badge/PokeBadge';
 import styled from 'styled-components';
-import genderCalculator from 'utils/pokeGenderCalc';
-import statsFormater from 'utils/pokeStatsFormater';
-import calculateWeaknesses from 'utils/pokeWeaknessCalc';
-import { capitalizeString, formatNumber } from 'utils/stringUtils';
+import { genderCalculator } from 'processes/gender';
+import { statsFormater } from 'processes/stats';
+import { calculateWeaknesses } from 'processes/weakness';
+import { capitalizeString, formatNumber } from 'utils/string';
 import { PokeballFilledIcon } from 'shared/ui/icons/PokeballFilled';
+import { Pokemon } from 'entities/types';
 
 const Container = styled.div`
   display: flex;
