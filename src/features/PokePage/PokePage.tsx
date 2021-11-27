@@ -2,7 +2,7 @@ import React from 'react';
 import Stats from 'features/Stats/Stats';
 import Sheet from 'react-modal-sheet';
 import PokeBadge from 'shared/ui/badge/PokeBadge';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { genderCalculator } from 'processes/gender';
 import { statsFormater } from 'processes/stats';
 import { calculateWeaknesses } from 'processes/weakness';
@@ -99,6 +99,20 @@ type PokeBallProps = {
   isSelected?: boolean;
 }
 
+const breatheAnimation = keyframes`
+ 0% { transform: rotate(0deg); }
+ 10% { transform: rotate(-5deg); }
+ 20% { transform: rotate(-10deg); }
+ 30% { transform: rotate(-20deg); }
+ 40% { transform: rotate(-30deg); }
+ 50% { transform: rotate(-20deg); }
+ 60% { transform: rotate(-10deg); }
+ 70% { transform: rotate(0deg); }
+ 80% { transform: rotate(10deg); }
+ 90% { transform: rotate(20deg); }
+ 100% { transform: rotate(0deg); }
+`;
+
 const PokeBall = styled.div<PokeBallProps>`
   position: absolute;
   top: 0;
@@ -106,6 +120,12 @@ const PokeBall = styled.div<PokeBallProps>`
   z-index: 1;
 
   color: ${(props) => (props.isSelected ? 'red' : 'white')};
+  transition: color 1s;
+
+  &:not(:active) {
+    animation-name: ${breatheAnimation};
+    animation-duration: 1s;
+  }
 `;
 
 type PokePageProps = {

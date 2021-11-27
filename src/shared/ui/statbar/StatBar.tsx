@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -38,15 +38,25 @@ const ColoredBar = styled.div <Omit<StatBarProps, 'name'>>`
   border-radius: 8px;
   width: ${(props) => `${props.percentage}%`};
   background: ${(props) => props.color};
+
+  transition: width 1s;
 `;
 
-const StatBar: React.FC<StatBarProps> = ({ name, color, percentage }) => (
-  <Container>
-    <Name>{name}</Name>
-    <Bar>
-      <ColoredBar percentage={percentage} color={color} />
-    </Bar>
-  </Container>
-);
+const StatBar: React.FC<StatBarProps> = ({ name, color, percentage }) => {
+  const [width, setWidth] = useState<number>(0);
+
+  useEffect(() => {
+    setWidth(percentage);
+  }, [percentage]);
+
+  return (
+    <Container>
+      <Name>{name}</Name>
+      <Bar>
+        <ColoredBar percentage={width} color={color} />
+      </Bar>
+    </Container>
+  );
+};
 
 export default StatBar;
