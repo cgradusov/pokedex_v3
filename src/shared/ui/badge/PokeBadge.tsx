@@ -6,6 +6,7 @@ export type PokeType = 'bug' | 'dark' | 'dragon' | 'electric' | 'fairy' | 'fight
 type PokeBadgeProps = {
   type: PokeType;
   isSelected?: boolean;
+  onClick?: () => void;
 }
 
 type BadgeProps = Omit<PokeBadgeProps, 'type'> & { gradient: string };
@@ -17,12 +18,16 @@ const Badge = styled.div<BadgeProps>`
   padding: 3px 8px;
   box-sizing: border-box;
   background: ${(props) => props.gradient};
-  border: ${(props) => (props.isSelected ? '2px solid #000000;' : 'none')};
+  border: ${(props) => (props.isSelected ? '2px solid #000000;' : '2px solid #ffffff;')};
   border-radius: 15px;
   width: fit-content;
   font-size: 10px;
   font-weight: 500;
   color: #000000;
+
+  @media screen and (max-width: 321px) {
+    padding: 2px 6px;
+  }
 `;
 
 type PokeTypesMap = {
@@ -50,11 +55,11 @@ const pokeTypeGradientMap: PokeTypesMap = {
   water: 'linear-gradient(180deg, #6371EA 0%, rgba(99, 113, 234, 0.55) 100%)',
 };
 
-const PokeBadge: React.FC<PokeBadgeProps> = ({ type, isSelected }) => {
+const PokeBadge: React.FC<PokeBadgeProps> = ({ type, isSelected, onClick }) => {
   const gradient = pokeTypeGradientMap[type];
 
   return (
-    <Badge gradient={gradient} isSelected={isSelected}>
+    <Badge gradient={gradient} isSelected={isSelected} onClick={onClick}>
       {/* TODO: Refactor to utility function */}
       {type.charAt(0).toUpperCase() + type.slice(1)}
     </Badge>
@@ -63,6 +68,7 @@ const PokeBadge: React.FC<PokeBadgeProps> = ({ type, isSelected }) => {
 
 PokeBadge.defaultProps = {
   isSelected: false,
+  onClick: () => {},
 };
 
 export default PokeBadge;

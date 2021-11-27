@@ -17,6 +17,10 @@ const Container = styled.div`
   justify-content: flex-start;
   box-sizing: border-box;
   padding: 0 32px;
+
+  @media screen and (max-width: 321px) {
+    padding: 0 16px;
+  }
 `;
 
 const Name = styled.h2`

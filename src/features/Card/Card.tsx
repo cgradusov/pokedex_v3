@@ -11,8 +11,6 @@ const Container = styled.div`
 
   width: 148px;
   min-height: 212px;
-  left: 31px;
-  top: 343px;
 
   border: 2px solid #EFEFEF;
   box-sizing: border-box;
@@ -22,8 +20,8 @@ const Container = styled.div`
     width: 120px;
   }
 
-  @media screen and (max-width: 310px) {
-    width: 100px;
+  @media screen and (max-width: 320px) {
+    min-height: 180px;
   }
 `;
 
