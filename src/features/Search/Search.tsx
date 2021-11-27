@@ -30,6 +30,7 @@ const FiltersButton = styled.div`
   justify-content: center;
   align-items: center;
   height: 40px;
+  position: relative;
 `;
 
 const ClearButton = styled.div`
@@ -48,15 +49,26 @@ const ClearButton = styled.div`
   align-items: center;
 `;
 
+const FiltersActive = styled.div`
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  background: #EB7C6C;
+`;
+
 type SearchProps = {
   searchValue: string;
+  isFiltersActive: boolean;
   onChange: (search: string) => void;
   onFiltersClick: () => void;
   onClick: () => void;
 }
 
 const Search: React.FC<SearchProps> = ({
-  searchValue, onClick, onChange, onFiltersClick,
+  searchValue, isFiltersActive, onClick, onChange, onFiltersClick,
 }) => (
   <Container>
     <SearchInputContainer>
@@ -80,6 +92,7 @@ const Search: React.FC<SearchProps> = ({
     </SearchInputContainer>
     <FiltersButton onClick={onFiltersClick}>
       <FiltersIcon />
+      {isFiltersActive ? <FiltersActive /> : null}
     </FiltersButton>
   </Container>
 );

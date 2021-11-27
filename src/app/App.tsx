@@ -34,10 +34,16 @@ function App() {
   return (
     <Container>
       <Route exact path="/">
-        <Main values={values} isFavouritesPage={false} />
+        <Main
+          values={values}
+          isFavouritesPage={false}
+        />
       </Route>
       <Route path="/fav">
-        <Main values={values} isFavouritesPage />
+        <Main
+          values={values}
+          isFavouritesPage
+        />
       </Route>
       <Route path="/about" component={About} />
       <BottomNav />

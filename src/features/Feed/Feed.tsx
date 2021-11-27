@@ -33,17 +33,20 @@ const StyledInfiniteScroll = styled(InfiniteScroll as unknown as AnyStyledCompon
   }
 `;
 
+const EmptyItems = styled.h2``;
+
 type FeedProps = {
   items: Pokemon[]
   hasMore: boolean;
   isPageOpen: boolean;
+  isFiltersOpen: boolean;
   fetchData: () => void;
   setCurrentPokemon: (el: Pokemon) => void;
   setPageOpen: (isPageOpen: boolean) => void;
 }
 
 const Feed: React.FC<FeedProps> = ({
-  items, hasMore, isPageOpen, fetchData, setCurrentPokemon, setPageOpen,
+  items, hasMore, isPageOpen, isFiltersOpen, fetchData, setCurrentPokemon, setPageOpen,
 }) => (
   <ScrollableContainer id="feed">
     <StyledInfiniteScroll
@@ -53,21 +56,21 @@ const Feed: React.FC<FeedProps> = ({
       loader={<h4>Loading...</h4>}
       scrollableTarget="feed"
     >
-      {items.map((el) => (
+      {items.length ? items.map((el) => (
         <Card
           key={el?.id}
           imageSrc={`/assets/${formatNumber(el?.id.toString())}.png`}
           imageAlt={el.name}
           name={`${capitalizeString(el.name)} #${formatNumber(el?.id.toString())}`}
           onClick={() => {
-            if (!isPageOpen) {
+            if (!isPageOpen && !isFiltersOpen) {
               setCurrentPokemon(el);
               setPageOpen(true);
             }
           }}
           types={el.types as PokeType[]}
         />
-      ))}
+      )) : <EmptyItems>Not Found</EmptyItems>}
     </StyledInfiniteScroll>
   </ScrollableContainer>
 );
