@@ -31,7 +31,7 @@ type ParamsButton = {
 
 const ParamButton: React.FC<ParamsButton> = ({ imageName, onClick, isSelected }) => (
   <Container isSelected={isSelected} onClick={() => onClick(imageName)}>
-    <Image src={`/assets/filters/${imageName}.png`} alt={imageName} />
+    <Image src={`/pokedex_v3/assets/filters/${imageName}.png`} alt={imageName} />
   </Container>
 );
 

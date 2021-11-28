@@ -58,7 +58,7 @@ const Feed: React.FC<FeedProps> = ({
       {items.length ? items.map((el) => (
         <Card
           key={el?.id}
-          imageSrc={`/assets/${formatNumber(el?.id.toString())}.png`}
+          imageSrc={`/pokedex_v3/assets/${formatNumber(el?.id.toString())}.png`}
           imageAlt={el.name}
           name={`${capitalizeString(el.name)} #${formatNumber(el?.id.toString())}`}
           onClick={() => {

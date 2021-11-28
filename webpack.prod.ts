@@ -11,6 +11,7 @@ const config: webpack.Configuration = merge(common, {
     path: path.resolve(__dirname, 'build'),
     filename: '[name].[contenthash].js',
     clean: true,
+    publicPath: '/pokedex_v3/',
   },
   optimization: {
     minimize: true,

@@ -10,6 +10,16 @@ const config: webpack.Configuration = merge(common, {
     path: path.resolve(__dirname, 'build_dev'),
     filename: 'bundle.js',
     clean: true,
+    publicPath: '/pokedex_v3',
+  },
+  // @ts-ignore
+  devServer: {
+    proxy: {
+      '/pokedex_v3/assets': {
+        target: 'http://localhost:8080',
+        pathRewrite: { '^/pokedex_v3/assets': '/assets' },
+      },
+    },
   },
 });
 

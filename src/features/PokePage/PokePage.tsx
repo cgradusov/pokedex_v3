@@ -167,7 +167,7 @@ const PokePage: React.FC<PokePageProps> = ({
             <Name>
               {`${capitalizeString(name)} #${formatNumber(id.toString())}`}
             </Name>
-            <Image src={`/assets/${formatNumber(id.toString())}.png`} alt={name} />
+            <Image src={`/pokedex_v3/assets/${formatNumber(id.toString())}.png`} alt={name} />
             <Description>
               {desc}
             </Description>
